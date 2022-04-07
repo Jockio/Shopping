@@ -16,4 +16,6 @@ if (obj.result && url.indexOf("shizibook") != -1 && url.indexOf("getRadical") !=
 	}
 }
 
+print(JSON.stringify(obj));
+
 $done({body: JSON.stringify(obj)});
