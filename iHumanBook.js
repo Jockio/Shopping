@@ -9,13 +9,27 @@ unlock vip by saymiss
 
 var url = $request.url;
 
-var obj = JSON.parse($response.body || '{}');
-if (obj.result && url.indexOf("shizibook") != -1 && url.indexOf("getRadical") != -1){
-	for (var i = 0; i < obj.result.length; i++) {
-		obj.result[i].isvip = 0;
-	}
+if (url.indexOf("bookapi") != -1){
+    body = $response.body.replace(/"vip_status":\{[^}]+\}/g, "\"vip_status\":\{\"last_product_id\":\"com\.ihuman\.book\.sub\.vip1y\",\"vip_type\":1,\"expire_time\":9876543210\}");
 }
 
-print(JSON.stringify(obj));
+if (url.indexOf("mathapi") != -1){
+    body = $response.body.replace(/"vip":\{[^}]+\}/g, "\"vip\":\{\"expire_time\":9876543210,\"vip_type\":1,\"legacy_product_id\":\"com\.ihuman\.imath\.cons\.vip1y\"\}");
+}
 
-$done({body: JSON.stringify(obj)});
+// 星星无限，可随意换装扮
+if (url.indexOf("engapi") != -1){
+    body = $response.body.replace(/"vip":\{[^}]+\}/g, "\"vip\":\{\"expire_time\":9876543210,\"vip_type\":3,\"last_product_id\":\"com\.ihuman\.english\.cons\.vip1y\"\}").replace(/"expire_at":\d+/g, "\"expire_at\":9876543210").replace(/"redeemed":\d/g, "\"redeemed\":1").replace(/coin":\d+/g, "coin\":9999999");
+}
+
+var obj = JSON.parse($response.body || '{}');
+if (obj.result && url.indexOf("shizibook") != -1 && url.indexOf("getRadical") != -1){
+    for (var i = 0; i < obj.result.length; i++) {
+        obj.result[i].isvip = 0;
+    }
+    print(JSON.stringify(obj));
+    $done({body: JSON.stringify(obj)});
+    return;
+}
+
+$done({body});
